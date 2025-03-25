@@ -1,11 +1,8 @@
 // Loading path module for operations with file paths.
-const path = require('path');
-
-function exit() {
-    console.log('Exercise ' + exercise + ' completed.');
-    process.exit(0);
-    console.log('I will not be printed to console :(');
-}
+import { resolve } from 'path';
+import dotenv from 'dotenv';
+import { join } from 'path';
+import { existsSync } from 'fs';
 
 // Exercise 1: Loading the .env file correctly.
 ///////////////////////////////////////////////
@@ -22,7 +19,7 @@ function exit() {
 // a. Try out different execution modes and print the value of `pathToDotEnv`.
 // Hint: use Node Runner and from the terminal.
 
-let pathToDotEnv = path.resolve(process.cwd(), '.env');
+let pathToDotEnv = resolve(process.cwd(), '../.env');
 console.log(pathToDotEnv);
 
 // Checkpoint. Does the value of the terminal depend 
@@ -50,12 +47,16 @@ console.log(pathToDotEnv);
 
 // Your code here.
 
-
-
+if (existsSync(pathToDotEnv)) {
+    dotenv.config({ path: pathToDotEnv });
+    console.log('Environment variables loaded successfully.');
+} else {
+    console.log('Error: .env file not found.');
+}
 
 // Exercise 2. Create and fill in .env file.
 ////////////////////////////////////////////
-exercise = 2;
+let exercise = 2;
 
 // You should:
 // - have an account with an RPC node provider (e.g., Alchemy or Infura),

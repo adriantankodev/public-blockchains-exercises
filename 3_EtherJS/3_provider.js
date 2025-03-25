@@ -1,6 +1,6 @@
 
 // Loading path module for operations with file paths.
-const path = require('path');
+import path from 'path';
 
 // Ethers JS: Providers.
 ////////////////////////
@@ -18,6 +18,8 @@ const path = require('path');
 
 // Your code here!
 
+import { ethers } from 'ethers';
+import dotenv from 'dotenv';
 
 // Exercise 1. Connect to Mainnet (a.k.a welcome async!).
 /////////////////////////////////////////////////////////
@@ -48,6 +50,7 @@ const path = require('path');
 
 // Your code here!
 
+const mainnetProvider = new ethers.providers.JsonRpcProvider(process.env.INFURA_MAINNET_API_URL);
 
 // b. Verify that the network's name is "mainnet" and the chain id is 1.
 
@@ -63,22 +66,21 @@ const path = require('path');
 
 // This is an asynchronous anonymous self-executing function. It is a ugly
 // construct, but it allows you to use await inside its body.
-(async () => {
-    
-    // Your code maybe here!
-
-})();
 
 // However, the async function could also be named, and the result is:
 const network = async () => {
     
-    // Your code here!
+    if (mainnetProvider) {
+        let network = await mainnetProvider.getNetwork();
+        console.log('Network:', network.name);
+        console.log('Chain ID:', Number(network.chainId));
+    }
 
 };
 
 // which you can then call:
 
-// network();
+network();
 
 // The second (less compact) notation has the advantage that we can invoke
 // the code only when needed, so it is preferred in this exercise sheet.
@@ -285,7 +287,7 @@ const linkAddress = '0x326c977e6efc84e512bb9c30f76e30c160ed06fb';
 // (ABI) of the contract, available at Etherscan. For your convenience, 
 // the LINK ABI is stored in this directory, under "link_abi.json";
 
-const linkABI = require('./link_abi.json');
+import linkABI from './link_abi.json';
 
 // Now your task. Get the balance for LINK for "unima.eth" and "vitalik.eth".
 // Hint: you need first to create a Contract object via `ethers.Contract`, 

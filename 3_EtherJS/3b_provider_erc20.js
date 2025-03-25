@@ -1,6 +1,8 @@
 
 // Loading path module for operations with file paths.
-const path = require('path');
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+import dotenv from 'dotenv';
 
 // Ethers JS: Providers.
 ////////////////////////
@@ -14,21 +16,27 @@ const path = require('path');
 // Exercise 0. Require the `dotenv` and `ethers` package.
 /////////////////////////////////////////////////////////
 
-// Hint: As you did in file 2_wallet.
+import { config } from 'dotenv';
+import { ethers } from 'ethers';
 
 // Require packages.
 
-pathToDotEnv = path.join(__dirname, '..', '..', '.env');
+let pathToDotEnv = resolve(process.cwd(), '../.env');
 // console.log(pathToDotEnv);
-require("dotenv").config({ path: pathToDotEnv });
+if (existsSync(pathToDotEnv)) {
+    dotenv.config({ path: pathToDotEnv });
+    console.log('Environment variables loaded successfully.');
+} else {
+    console.log('Error: .env file not found.');
+}
 
-const ethers = require("ethers");
+import { JsonRpcProvider } from "ethers";
 
-const providerKey = process.env.ALCHEMY_KEY;
+const providerKey = process.env.INFURA_KEY;
 
-const sepoliaUrl = `${process.env.ALCHEMY_SEPOLIA_API_URL}${providerKey}`;
+const sepoliaUrl = `${process.env.INFURA_SEPOLIA_API_URL}${providerKey}`;
 // console.log(sepoliaUrl);
-const sepoliaProvider = new ethers.JsonRpcProvider(sepoliaUrl);
+const sepoliaProvider = new JsonRpcProvider(sepoliaUrl);
 
 // Exercise 1. Bonus. Get ERC20 Balance.
 ////////////////////////////////////////
@@ -45,14 +53,15 @@ const sepoliaProvider = new ethers.JsonRpcProvider(sepoliaUrl);
 // https://faucets.chain.link/sepolia
 // Then check the transaction: with which contract did it interact?
 
-const linkAddress = "";
+// const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
+const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 
 // At the address, there is only bytecode. So we need to tell Ethers JS, what
 // methods can be invoked. To do so, we pass the Application Binary Interface
 // (ABI) of the contract, available at Etherscan. For your convenience, 
 // the LINK ABI is stored in this directory, under "link_abi.json";
 
-const linkABI = require('./link_abi.json');
+import linkABI from './link_abi.json' with { type: 'json' };
 
 // Now your task. Get the balance for LINK for "unima.eth" and "vitalik.eth".
 // Hint: you need first to create a Contract object via `ethers.Contract`, 
@@ -61,10 +70,22 @@ const linkABI = require('./link_abi.json');
 // https://faucets.chain.link/sepolia
 
 const link = async () => {
-   
-    // Your code here!
+    const linkContract = new ethers.Contract(linkAddress, linkABI, sepoliaProvider);
+
+    const unimaAddress = await sepoliaProvider.resolveName("unima.eth");
+    const vitalikAddress = await sepoliaProvider.resolveName("vitalik.eth");
+    const adrtnkAddress = await sepoliaProvider.resolveName("adrtnk.eth");
+    const chrisAddress = await sepoliaProvider.resolveName("chris.eth");
+
+    const unimaBalance = await linkContract.balanceOf(unimaAddress);
+    const vitalikBalance = await linkContract.balanceOf(vitalikAddress);
+    const adrtnkBalance = await linkContract.balanceOf(adrtnkAddress);
+    const chrisBalance = await linkContract.balanceOf(chrisAddress);
+
+    console.log("LINK balance for unima.eth: ", unimaBalance.toString());
+    console.log("LINK balance for vitalik.eth: ", vitalikBalance.toString());
+    console.log("LINK balance for adrtnk.eth: ", adrtnkBalance.toString());
+    console.log("LINK balance for chris.eth: ", chrisBalance.toString());
 };
 
-
-// link();
-
+link();

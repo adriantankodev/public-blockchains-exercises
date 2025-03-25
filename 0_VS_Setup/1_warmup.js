@@ -53,12 +53,12 @@
 
 // a. Hint: follow the pattern.
 variable1 = 1;
-variable2 = ;
-variable3 3;
+variable2 = 2;
+variable3 = 3;
 
 // b. Hint: This function needs a name after the word function.
-function () {
-  console.log("Hello!");
+function chris() {
+  console.log("Hello Chris!");
 }
 
 // EXERCISE 2. Producticity: Shorcuts and More.
@@ -73,7 +73,7 @@ function () {
 // or Cmd-/ (Mac). Notice if you apply the command multiple times, it will
 // uncomment/comment/uncomment... it.
 
-uselessCode = 'I am useless';
+uselessCode = 'I am useless, kill me';
 
 // b. Cool. What other shorcuts are available? Here is a shortcut to find
 // them all. Ctrl-Shift-P. Look around and remember how to get here,
@@ -94,8 +94,8 @@ catchMeIfYouCan3 = "You did not catch me";
 // there is a shortcut for that: Alt-ArrowUp/Down.
 
 // Order the lines below accordingly.
-console.log("2. I would like to go below.");
 console.log("1. I would like to go above.");
+console.log("2. I would like to go below.");
 
 // Great! To learn more about key bindings, see:
 // - https://code.visualstudio.com/docs/getstarted/keybindings

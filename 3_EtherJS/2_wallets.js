@@ -4,33 +4,29 @@
 // Ethers JS:
 // https://docs.ethers.org/v6/
 
-function exit() {
-    console.log('Exercise ' + exercise + ' completed.');
-    process.exit(0);
-    console.log('I will not be printed to console :(');
-}
-
 // Exercise 1. Create a Random Wallet.
 //////////////////////////////////////
-exercise = '1a';
 
-const ethers = require("ethers");
+import { assert } from "console";
+import { ethers } from "ethers";
 
 // a. Create a random wallet and print the address, the private key,
 // and the mnenomic phrase.
-// Hint: ethers.Wallet.createRandom();
+// Hint: 
 
+let wallet = ethers.Wallet.createRandom();
 
-// exit();
+console.log("Address:", wallet.address);
+console.log("Private key:", wallet.privateKey);
+console.log("Mnemonic phrase:", wallet.mnemonic.phrase);
 
 // b. Bonus. Print the derivation path of the wallet and check that it is
 // equal to `baseDevPath`. 
 
-exercise = '1b';
 
 let baseDevPath = "m/44'/60'/0'/0/";
 
-// Wait is the derivation path? 
+// Wait what is the derivation path? 
 // Basically, the mnemonic alone isn't enough to determine an address
 // and you need this extra bit of information. You may learn more here:
 // https://www.youtube.com/watch?v=tPCN3nDVzZI
@@ -42,13 +38,15 @@ console.log("Derivation path:", wallet.path);
 
 // Your code here!
 
+const walletPath = baseDevPath + "0";
+
+assert(wallet.path === walletPath, "The derivation path is not equal to baseDevPath.");
 
 // exit();
 
 // Exercise 2. Bonus. Create a Hierarchical Deterministic Wallet.
 /////////////////////////////////////////////////////////////////
 console.log();
-exercise = 2;
 
 // From the same wallet, you can derive a deterministic sequence of addresses.
 // First, pick a mnemonic, then create a hierarchical deterministic wallet, 
@@ -57,4 +55,18 @@ exercise = 2;
 
 // Your code here!
 
-// exit();
+let mnemonic = ethers.Wallet.createRandom().mnemonic.phrase;
+let hdNode = ethers.HDNodeWallet.fromMnemonic(mnemonic);
+
+let addresses = [];
+let privateKeys = [];
+
+for (let i = 0; i < 10; i++) {
+    let path = `${baseDevPath}${i}`;
+    let wallet = ethers.HDNodeWallet.fromPhrase(mnemonic, path);
+    addresses.push(wallet.address);
+    privateKeys.push(wallet.privateKey);
+}
+
+console.log("Addresses:", addresses);
+console.log("Private keys:", privateKeys);
